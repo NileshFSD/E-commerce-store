@@ -19,6 +19,8 @@ import {
 } from "firebase/firestore";
 import { BiEdit } from "react-icons/bi";
 import EditProduct from "./EditProduct";
+import Spinner from "../Spinner";
+import { ToastContainer, toast } from "react-toastify";
 
 const Product = () => {
   const data = useOutletContext();
@@ -28,6 +30,11 @@ const Product = () => {
   const { productsData, cartData } = contextData;
   const [loggedInUser, setLoggedInUser] = useState();
   const productId = useParams();
+  const [loading, setLoading] = useState(true);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 500);
 
   const product = data.find((prod) => {
     return prod.id === Number(Object.values(productId)[0]);
@@ -55,7 +62,7 @@ const Product = () => {
     try {
       await deleteDoc(deleteDocRef);
       navigate("/products");
-      alert("Deleted");
+      toast.success("Deleted");
     } catch (error) {
       alert(error);
     }
@@ -81,7 +88,7 @@ const Product = () => {
 
     if (loggedInUser === undefined) {
       navigate("/login");
-      alert("Please login");
+      toast.info("Please login");
     } else {
       if (isAdded === undefined) {
         try {
@@ -98,12 +105,12 @@ const Product = () => {
             created: Timestamp.now(),
           });
 
-          alert("added to cart");
+          toast.success("added to cart");
         } catch (error) {
-          alert(error);
+          toast.error(error);
         }
       } else {
-        alert("Product already added to the cart");
+        toast.info("Product already added to the cart");
         navigate("/cart");
       }
     }
@@ -111,84 +118,95 @@ const Product = () => {
 
   return (
     <>
-      {show ? (
-        <div className="product-container">
-          <div>
-            <Link to="/products" className="back">
-              <IoMdArrowRoundBack />
-            </Link>
-          </div>
-          <div className="product">
-            <div className="product-pic">
-              <img src={product?.image} alt="product-pic" />
-            </div>
-            <div className="products-details">
-              <h2>
-                {" "}
-                <b> {product?.title} </b>
-              </h2>
-              <div>
-                Rating : {product?.rate}{" "}
-                <AiTwotoneStar style={{ marginTop: "-.2rem" }} />
-                <i className="fa-regular fa-star"></i>
-              </div>
-              <hr />
-              <div>
-                <b>
-                  <IoMdPricetag /> ${product?.price}
-                </b>
-              </div>
-              <div>
-                <h3>
-                  {`${
-                    product?.category.slice(0, 1).toUpperCase() +
-                    product?.category.slice(1)
-                  } `}{" "}
-                </h3>
-              </div>
-              <div>
-                <b>Description </b> <br />
-                {product?.description}
-              </div>
-              <div>
-                <div className="product-update-delete">
-                  {" "}
-                  {loggedInUser === product?.user ? (
-                    <>
-                      <AiTwotoneDelete
-                        onClick={handleDelete}
-                        className="product-delete"
-                      />
-
-                      <BiEdit className="product-edit" onClick={handleEdit} />
-                    </>
-                  ) : null}
-                </div>
-                <div className="addCart-container">
-                  <button
-                    type="submit"
-                    onClick={() => handleAddToCart(product.id)}
-                  >
-                    {" "}
-                    <MdAddShoppingCart className="addToCart" />
-                    Add to cart
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <ToastContainer position="top-left" />
+      {loading ? (
+        <Spinner />
       ) : (
-        <EditProduct
-          setShow={setShow}
-          id={id}
-          toTitle={product?.title}
-          toDescription={product?.description}
-          toRate={product?.rate}
-          toPrice={product?.price}
-          toCategory={product?.category}
-          toImage={product?.image}
-        />
+        <>
+          {" "}
+          {show ? (
+            <div className="product-container">
+              <div>
+                <Link to="/products" className="back">
+                  <IoMdArrowRoundBack />
+                </Link>
+              </div>
+              <div className="product">
+                <div className="product-pic">
+                  <img src={product?.image} alt="product-pic" />
+                </div>
+                <div className="products-details">
+                  <h2>
+                    {" "}
+                    <b> {product?.title} </b>
+                  </h2>
+                  <div>
+                    Rating : {product?.rate}{" "}
+                    <AiTwotoneStar style={{ marginTop: "-.2rem" }} />
+                    <i className="fa-regular fa-star"></i>
+                  </div>
+                  <hr />
+                  <div>
+                    <b>
+                      <IoMdPricetag /> ${product?.price}
+                    </b>
+                  </div>
+                  <div>
+                    <h3>
+                      {`${
+                        product?.category.slice(0, 1).toUpperCase() +
+                        product?.category.slice(1)
+                      } `}{" "}
+                    </h3>
+                  </div>
+                  <div>
+                    <b>Description </b> <br />
+                    {product?.description}
+                  </div>
+                  <div>
+                    <div className="product-update-delete">
+                      {" "}
+                      {loggedInUser === product?.user ? (
+                        <>
+                          <AiTwotoneDelete
+                            onClick={handleDelete}
+                            className="product-delete"
+                          />
+
+                          <BiEdit
+                            className="product-edit"
+                            onClick={handleEdit}
+                          />
+                        </>
+                      ) : null}
+                    </div>
+                    <div className="addCart-container">
+                      <button
+                        type="submit"
+                        onClick={() => handleAddToCart(product.id)}
+                      >
+                        {" "}
+                        <MdAddShoppingCart className="addToCart" />
+                        Add to cart
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <EditProduct
+              setShow={setShow}
+              id={id}
+              toTitle={product?.title}
+              toDescription={product?.description}
+              toRate={product?.rate}
+              toPrice={product?.price}
+              toCategory={product?.category}
+              toImage={product?.image}
+            />
+          )}
+        </>
       )}
     </>
   );

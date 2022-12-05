@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { FaUserAlt } from "react-icons/fa";
@@ -6,6 +6,7 @@ import { BsCart } from "react-icons/bs";
 import { FiLogIn } from "react-icons/fi";
 import { auth } from "../Firebase/firebase-config";
 import { signOut } from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
 
 const Navbar = () => {
   const [loggedInUser, setLoggedInUser] = useState();
@@ -19,9 +20,14 @@ const Navbar = () => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    await signOut(auth);
-    alert("SignOut Done");
-    navigate("/");
+
+    try {
+      await signOut(auth);
+      toast.success("Sign-out Successfully");
+      navigate("/");
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -70,16 +76,6 @@ const Navbar = () => {
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenu2"
                   >
-                    {/* <button className="dropdown-item" type="button">
-                      Action
-                    </button>
-                    <button className="dropdown-item" type="button">
-                      Another action
-                    </button> */}
-                    {/* <button className="dropdown-item" type="button">
-                      Change Password
-                    </button> */}
-
                     <button
                       className="dropdown-item"
                       type="button"
@@ -101,6 +97,7 @@ const Navbar = () => {
           )}
         </ul>
       </div>
+      <ToastContainer position="top-left" />
     </nav>
   );
 };

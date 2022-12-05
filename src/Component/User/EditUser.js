@@ -2,6 +2,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { db } from "../../Firebase/firebase-config";
+import { ToastContainer, toast } from "react-toastify";
 
 const EditUser = ({
   toName,
@@ -19,7 +20,6 @@ const EditUser = ({
   const [city, setCity] = useState(toCity);
   const [zipcode, setZipcode] = useState(toZip);
   const [street, setStreet] = useState(toStreet);
-  //   const [contact, setContact] = useState("");
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -35,15 +35,16 @@ const EditUser = ({
         zipcode,
       });
 
-      alert("Updated successfully");
+      toast.success("Updated successfully");
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
 
     setShow(true);
   };
   return (
     <div className="signup-container">
+      <ToastContainer position="top-left" />
       <div className="close-container">
         <AiOutlineCloseCircle className="close" onClick={() => setShow(true)} />
       </div>
@@ -80,16 +81,6 @@ const EditUser = ({
           value={email}
           autoComplete="off"
         />
-        <label htmlFor="contact">Contact </label>
-        {/* <input
-          type="number"
-          name="contact"
-          id="contact"
-          placeholder="Mobile Number"
-          onChange={(e) => setContact(e.target.value)}
-          
-        />
-        <br /> */}
         <label htmlFor="street">Street </label>
         <input
           type="text"

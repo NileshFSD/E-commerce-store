@@ -2,6 +2,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { db } from "../../Firebase/firebase-config";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { ToastContainer, toast } from "react-toastify";
 
 const EditProduct = ({
   id,
@@ -35,15 +36,16 @@ const EditProduct = ({
         rating,
       });
 
-      alert("Product updated");
+      toast.success("Product updated");
       setShow(true);
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
   };
 
   return (
     <div className="product-edit-container">
+      <ToastContainer position="top-left" />
       <div className="close-container">
         <AiOutlineCloseCircle className="close" onClick={() => setShow(true)} />
       </div>

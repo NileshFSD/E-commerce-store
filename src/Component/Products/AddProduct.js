@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateContext from "../../Context/createContext";
 import { auth, db } from "../../Firebase/firebase-config";
+import { ToastContainer, toast } from "react-toastify";
 
 const AddProduct = () => {
   const contextData = useContext(CreateContext);
@@ -38,14 +39,15 @@ const AddProduct = () => {
         user: user,
         created: Timestamp.now(),
       });
-      alert("Added");
+      toast.success("Added");
       navigate("/products");
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
   };
   return (
     <div className="add-product-container">
+      <ToastContainer position="top-left" />
       <form className="add-product-form" onSubmit={handleSubmit}>
         <label htmlFor="name">Title </label>
         <input

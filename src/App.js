@@ -17,6 +17,7 @@ import Userdata from "./Component/User/Userdata";
 import Users from "./Component/User/Users";
 import User from "./Component/User/User";
 import AddProduct from "./Component/Products/AddProduct";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (

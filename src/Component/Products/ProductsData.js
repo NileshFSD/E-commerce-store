@@ -44,7 +44,6 @@ const Data = () => {
   }
 
   const data = apiProducts.concat(addedProducts);
-  console.log();
 
   return (
     <div className="home-container">

@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { db, auth } from "../Firebase/firebase-config";
 import {} from "firebase/storage";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -34,13 +35,13 @@ const Signup = () => {
         id: id,
         created: Timestamp.now(),
       });
-      alert("Registration done");
+      toast.success("Registration done");
 
       setTimeout(() => {
         navigate("/");
       }, 2000);
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
   };
 
@@ -141,6 +142,7 @@ const Signup = () => {
           </Link>
         </div>
       </form>
+      <ToastContainer position="top-left" />
     </div>
   );
 };

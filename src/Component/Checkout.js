@@ -1,11 +1,11 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import React, { useState } from "react";
-// import CreateContext from "../Context/createContext";
 import { db } from "../Firebase/firebase-config";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const Checkout = ({ setShow, userCart }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -25,17 +25,18 @@ const Checkout = ({ setShow, userCart }) => {
 
         alert("Order place successfully");
         if (userCart.length === 0) {
-          alert("Order place successfully");
+          toast.success("Order place successfully");
           navigate("/cart");
         }
       } catch (error) {
-        alert(error);
+        toast.error(error);
       }
     }
   };
 
   return (
     <div className="checkout-container">
+      <ToastContainer position="top-left" />
       <div className="back-arrow">
         <Link to="/cart" className="back">
           <IoMdArrowRoundBack onClick={() => setShow(true)} />

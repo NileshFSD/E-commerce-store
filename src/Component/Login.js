@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Firebase/firebase-config";
 import { Link, useNavigate } from "react-router-dom";
 import CreateContext from "../Context/createContext";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const contextData = useContext(CreateContext);
@@ -19,14 +20,16 @@ const Login = () => {
     });
 
     if (findUser === undefined) {
-      alert("You have deleted your data, kindly register with another email");
+      toast.info(
+        "You have deleted your data, kindly register with another email"
+      );
     } else {
       try {
         await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
 
-        alert("Login Successfully");
+        toast.success("Login Successfully");
       } catch (error) {
-        alert(error);
+        toast.error(error);
       }
     }
 
@@ -37,6 +40,7 @@ const Login = () => {
 
   return (
     <div className="signin-container">
+      <ToastContainer position="top-left" />
       <form className="signin-form" onSubmit={handleLogin}>
         <br />
         <label htmlFor="email">Email </label>
