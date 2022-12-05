@@ -111,20 +111,21 @@ const Products = () => {
             <div className="products">
               {data
                 .filter((item) => {
-                  if (search === "name") {
-                    return item?.title
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase());
-                  } else if (search === "category") {
-                    return item?.category
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase());
-                  } else if (search === "description") {
-                    return item?.description
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase());
-                  } else {
-                    return item;
+                  switch (search) {
+                    case "name":
+                      return item?.title
+                        .toLowerCase()
+                        .includes(searchValue.toLowerCase());
+                    case "category":
+                      return item?.category
+                        .toLowerCase()
+                        .includes(searchValue.toLowerCase());
+                    case "description":
+                      return item?.description
+                        .toLowerCase()
+                        .includes(searchValue.toLowerCase());
+                    default:
+                      return item;
                   }
                 })
                 .slice(pageVisited, pageVisited + productPerPage)
